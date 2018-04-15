@@ -9,7 +9,8 @@ export default class Pager extends Component{
 		items: PropTypes.arrayOf(PropTypes.object),
 		searchFunc: PropTypes.func,
 		pageSize: PropTypes.number,
-		dataKey: PropTypes.string
+		dataKey: PropTypes.string,
+		children: PropTypes.func.isRequired
 	};
 
 	static defaultProps = {
@@ -150,16 +151,13 @@ export default class Pager extends Component{
 					}</div>
 				</header>
 				<div className="results">{
-					React.Children.map(
-						children,
-						c => React.cloneElement(c, {
-							[dataKey]: items,
-							currentPage: page,
-							numPages,
-							pageSize,
-							searchText
-						})
-					)
+					children({
+						[dataKey]: items,
+						currentPage: page,
+						numPages,
+						pageSize,
+						searchText
+					})
 				}</div>
 			</div>
 		);

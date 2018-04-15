@@ -48,9 +48,20 @@ describe('<Pager/>', function(){
 
 	beforeEach(function(){
 		wrapper = mount(
-			<Pager {...testProps}>
-				<Tester/>
-			</Pager>
+			<Pager {...testProps}>{
+				({
+					items,
+					searchText,
+					currentPage,
+					numPages
+				}) => 
+					<Tester
+						items={items}
+						searchText={searchText}
+						currentPage={currentPage}
+						numPages={numPages}
+					/>
+			}</Pager>
 		)
 	})
 
@@ -61,14 +72,14 @@ describe('<Pager/>', function(){
 			expect(wrapper.find(Tester).props().items.length)
 				.to.equal(testProps.pageSize);
 		})
-		it(`can receive a 'dataProp' property to pass array as a custom prop, instead of 'items'`, () => {
+		it(`can receive a 'dataKey' property to pass array as a custom prop, instead of 'items'`, () => {
 			wrapper = mount(
 				<Pager
 					{...testProps}
 					dataKey="data"
-				>
-					<Tester/>
-				</Pager>
+				>{({data}) => 
+					<Tester data={data}/>
+				}</Pager>
 			)
 			expect(wrapper.find(Tester).props().data.length)
 				.to.equal(testProps.pageSize);
@@ -164,9 +175,13 @@ describe('<Pager/>', function(){
 			let searchFunc = sinon.spy();
 			let searchText = "test";
 			wrapper = mount(
-				<Pager {...testProps} searchFunc={searchFunc}>
-					<Tester/>
-				</Pager>
+				<Pager {...testProps} searchFunc={searchFunc}>{
+					({items, searchText}) => 
+						<Tester
+							searchText={searchText}
+							items={items}
+						/>
+				}</Pager>
 			);
 			wrapper.setState({searchText});
 			testProps.items.forEach(i => {
@@ -176,9 +191,12 @@ describe('<Pager/>', function(){
 		it(`sets focus to search input on mount`, () => {
 			let inputLoaded = sinon.spy(Pager.prototype, 'inputLoaded');
 			wrapper = mount(
-				<Pager {...testProps}>
-					<Tester/>
-				</Pager>
+				<Pager {...testProps}>{
+					({items}) => 
+						<Tester
+							items={items}
+						/>
+				}</Pager>
 			)
 			expect(inputLoaded.calledOnce)
 				.to.be.true;
