@@ -67,7 +67,7 @@ describe('<Pager/>', function(){
 
 	describe('pagination functionality', () => {
 		it('takes items array as a prop, and segments into pages of a given size, passing only items on current page to children', () => {
-			expect(wrapper.find('li [data-id]'))
+			expect(wrapper.find('li[data-id]'))
 				.to.have.lengthOf(testProps.pageSize);
 			expect(wrapper.find(Tester).props().items.length)
 				.to.equal(testProps.pageSize);
